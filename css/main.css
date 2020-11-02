@@ -1,219 +1,213 @@
 @charset "UTF-8";
 /* header */
 .header {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
+   position: absolute;
+   left: 0;
+   top: 0;
+   width: 100%;
 }
 .header .gnb {
-    overflow: hidden;
-    max-width: 1000px;
-    margin: 0 auto;
-    width: 100%;
+   overflow: hidden;
+   max-width: 1000px;
+   margin: 0 auto;
+   width: 100%;
 }
 .header .gnb li {
-    float: left;
-    width: 25%;
-    text-align: center;
+   float: left;
+   width: 25%;
+   text-align: center;
 }
 .header .gnb li span {
-    display: block;
-    width: 100%;
-    height: 44px;
-    line-height: 44px;
-    cursor: pointer;
+   display: block;
+   width: 100%;
+   height: 44px;
+   line-height: 44px;
+   cursor: pointer;
 }
 
 .global_header {
-    position: absolute;
-    left: 0;
-    top: 44px;
-    width: 100%;
-    padding: 0 20px;
-    border-bottom: 1px solid #ddd;
+   position: absolute;
+   left: 0;
+   top: 44px;
+   width: 100%;
+   padding: 0 20px;
+   border-bottom: 1px solid #ddd;
 }
 .global_header .global_header_inner {
-    max-width: 1000px;
-    width: 100%;
-    height: 52px;
-    margin: 0 auto;
+   max-width: 1000px;
+   width: 100%;
+   height: 52px;
+   margin: 0 auto;
 }
 .global_header .global_header_inner h1 {
-    float: left;
+   float: left;
 }
 .global_header .global_header_inner h1 a {
-    display: block;
-    line-height: 52px;
-    color: rgb(29, 29, 31);
-    font-size: 20px;
-    font-weight: bold;
+   display: block;
+   line-height: 52px;
+   color: rgb(29, 29, 31);
+   font-size: 20px;
+   font-weight: bold;
 }
 .global_header .global_header_inner .util {
-    overflow: hidden;
-    float: right;
+   overflow: hidden;
+   float: right;
 }
 .global_header .global_header_inner .util li {
-    float: left;
-    margin-left: 20px;
+   float: left;
+   margin-left: 20px;
 }
 .global_header .global_header_inner .util li:first-child {
-    margin-left: 0;
+   margin-left: 0;
 }
 .global_header .global_header_inner .util li span {
-    float: left;
-    display: block;
-    height: 52px;
-    line-height: 52px;
-    font-size: 14px;
-    cursor: pointer;
+   float: left;
+   display: block;
+   height: 52px;
+   line-height: 52px;
+   font-size: 14px;
+   cursor: pointer;
 }
 /* --------------------------------------------- */
 /* section */
 .section {
-    padding-top: 50vh;
+   padding-top: 50vh;
 }
 .section .main_message {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 3em;
-    font-size: 2.5rem;
-    opacity: 0;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: 3em;
+   font-size: 2.5rem;
+   opacity: 0;
 }
 .section .main_message p {
-    line-height: 1.2;
-    font-weight: bold;
-    text-align: center;
+   line-height: 1.2;
+   font-weight: bold;
+   text-align: center;
 }
 .section .sticky_message {
-    display: none;
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
+   display: none;
+   position: fixed;
+   left: 0;
+   top: 0;
+   width: 100%;
 }
 
 /* 스크롤 값에따른 메세지 여부 */
-body.scroll_section_1 .section_1 .sticky_message {
-    display: block;
-}
-body.scroll_section_2 .section_2 .sticky_message {
-    display: block;
-}
-body.scroll_section_3 .section_3 .sticky_message {
-    display: block;
-}
+body.scroll_section_1 .section_1 .sticky_message,
+body.scroll_section_2 .section_2 .sticky_message,
+body.scroll_section_3 .section_3 .sticky_message,
 body.scroll_section_4 .section_4 .sticky_message {
-    display: block;
+   display: block;
 }
 
 .section .dec {
-    max-width: 1000px;
-    width: 100%;
-    margin: 0 auto;
-    font-size: 1.2rem;
-    color: #888;
+   max-width: 1000px;
+   width: 100%;
+   margin: 0 auto;
+   font-size: 1.2rem;
+   color: #888;
 }
 .section .dec span {
-    float: left;
-    margin-right: 0.2em;
-    font-weight: bold;
-    font-size: 3rem;
-    color: rgb(29, 29, 31);
+   float: left;
+   margin-right: 0.2em;
+   font-weight: bold;
+   font-size: 3rem;
+   color: rgb(29, 29, 31);
 }
 /* section_1 */
 .section_1 h1 {
-    font-size: 4rem;
-    font-weight: bold;
-    text-align: center;
+   font-size: 4rem;
+   font-weight: bold;
+   text-align: center;
 }
 
 /* section_2 */
 .section_2 {
-    padding: 0 20px;
+   padding: 0 20px;
 }
 /* section_3 */
 .section_3 {
-    padding: 0 20px;
+   padding: 0 20px;
 }
 .section_3 .main_message p {
-    font-size: 3.5rem;
+   font-size: 3.5rem;
 }
 .section_3 .main_message p span {
-    display: block;
-    margin-bottom: 0.5em;
-    font-size: 1rem;
+   display: block;
+   margin-bottom: 0.5em;
+   font-size: 1rem;
 }
 .section_3 .sub_message p {
-    width: 20%;
-    font-weight: bold;
+   width: 20%;
+   font-weight: bold;
 }
 .section_3 .sub_message .line {
-    width: 1px;
-    height: 100px;
-    background: rgb(29, 29, 31);
+   width: 1px;
+   height: 100px;
+   background: rgb(29, 29, 31);
 }
 /* section_4 */
 .section_4 {
-    padding: 0 20px;
+   padding: 0 20px;
 }
 .section_4 p {
-    max-width: 1000px;
-    width: 100%;
-    margin: 0 auto;
+   max-width: 1000px;
+   width: 100%;
+   margin: 0 auto;
 }
 .section_4 .mid_message {
-    padding: 0 20px;
+   padding: 0 20px;
 }
 .section_4 .mid_message {
-    font-size: 2rem;
-    color: #888;
+   font-size: 2rem;
+   color: #888;
 }
 .section_4 .mid_message span {
-    color: rgb(29, 29, 31);
-    font-weight: bold;
+   color: rgb(29, 29, 31);
+   font-weight: bold;
 }
 .section_4 .canvas_text {
-    font-size: 1.2rem;
-    color: #888;
+   font-size: 1.2rem;
+   color: #888;
 }
 /* footer */
 .footer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 7rem;
-    color: #fff;
-    background: darkorange;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   height: 7rem;
+   color: #fff;
+   background: darkorange;
 }
 @media (min-width: 1024px) {
-    /* section */
-    .section .main_message {
-        font-size: 4vw;
-    }
-    .section .main_message span {
-        font-size: 1.5vw;
-    }
-    .section .dec {
-        font-size: 2rem;
-    }
-    .section .dec span {
-        font-size: 6rem;
-    }
-    /* section_1 */
-    .section_1 h1 {
-        font-size: 9vw;
-    }
-    /* section_3 */
-    .section_3 .main_message {
-        font-size: 6vw;
-    }
-    /* section_4 */
-    .section_4 .min_message {
-        font-size: 4vw;
-    }
-    .section_4 .canvas_text {
-        font-size: 2rem;
-    }
+   /* section */
+   .section .main_message {
+      font-size: 4vw;
+   }
+   .section .main_message span {
+      font-size: 1.5vw;
+   }
+   .section .dec {
+      font-size: 2rem;
+   }
+   .section .dec span {
+      font-size: 6rem;
+   }
+   /* section_1 */
+   .section_1 h1 {
+      font-size: 9vw;
+   }
+   /* section_3 */
+   .section_3 .main_message {
+      font-size: 6vw;
+   }
+   /* section_4 */
+   .section_4 .min_message {
+      font-size: 4vw;
+   }
+   .section_4 .canvas_text {
+      font-size: 2rem;
+   }
 }
