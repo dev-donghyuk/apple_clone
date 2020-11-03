@@ -14,7 +14,7 @@ $(document).ready(function () {
         messageD: document.querySelector(".section_1 .main_massage.d"),
       },
       values: {
-        messageA_opacity: [0, 1, { start: 0.1, end: 0.5 }],
+        messageA_opacity: [0, 1, { start: 0.1, end: 0.2 }],
         messageB_opacity: [0, 1, { start: 0.3, end: 0.4 }],
       },
     },
@@ -74,14 +74,36 @@ $(document).ready(function () {
   let enterNewScene = false; // 씬이 변경될때 스위치
   const calcValues = (values, currentYOffset) => {
     let result;
+    // 현재 씬 높이 값
+    const scrollHeight = sceneInfo[currentScene].scrollHeight;
     // 현재 활성화된 씬에서의 스크롤 높이 비율 === 현재 씬에서의 스크롤 값 / 현재 씬 높이 값
-    let scrollRatio = currentYOffset / sceneInfo[currentScene].scrollHeight;
-    // 만약 200 ~ 900일 경우  사이값은 700으로해서 비율 구해주고 초기 값 더해줌
-    result = scrollRatio * (values[1] - values[0]) + values[0];
+    // 0 ~ 1
+    const scrollRatio = currentYOffset / scrollHeight;
 
     if (values.length === 3) {
       // start ~ end 사이에 애니메이션 실행
+      // 활성화 씬 전체기준 애니메이션 2개 이상일 때
+      const partScrollStart = values[2].start * scrollHeight; // start 스크롤 값 px
+      const partScrollEnd = values[2].end * scrollHeight; // end 스크롤 값 px
+      const partScrollHeight = partScrollEnd - partScrollStart;
+      if (
+        currentYOffset >= partScrollStart &&
+        currentYOffset <= partScrollEnd
+      ) {
+        // start ~ end 구간에서의 현재 스크롤 값 비율
+        result =
+          ((currentYOffset - partScrollStart) / partScrollHeight) *
+            (values[1] - values[0]) +
+          values[0];
+      } else if (currentYOffset < partScrollStart) {
+        result = values[0];
+      } else if (currentYOffset > partScrollEnd) {
+        result = values[1];
+      }
     } else {
+      // 활성화 씬 전체기준 애니메이션 1개일 때
+      // 만약 200 ~ 900일 경우  사이값은 700으로해서 비율 구해주고 초기 값 더해줌
+      result = scrollRatio * (values[1] - values[0]) + values[0];
     }
 
     return result;
