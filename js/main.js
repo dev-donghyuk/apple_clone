@@ -12,8 +12,15 @@ $(document).ready(function () {
             messageB: document.querySelector('.section_1 .main_message.b'),
             messageC: document.querySelector('.section_1 .main_message.c'),
             messageD: document.querySelector('.section_1 .main_message.d'),
+            canvas: document.querySelector('.video_canvas_0'),
+            context: document.querySelector('.video_canvas_0').getContext('2d'),
+            videoImages: [],
          },
          values: {
+            // Video
+            videoImageCount: 300,
+            imageSequence: [0, 299],
+            canvas_opacity: [1, 0, { start: 0.9, end: 1 }],
             // A
             messageA_opacity_in: [0, 1, { start: 0.1, end: 0.2 }],
             messageA_translateY_in: [20, 0, { start: 0.1, end: 0.2 }],
@@ -57,8 +64,16 @@ $(document).ready(function () {
             messageC: document.querySelector('.section_3 .c'),
             lineB: document.querySelector('.section_3 .b .line'),
             lineC: document.querySelector('.section_3 .c .line'),
+            canvas: document.querySelector('.video_canvas_1'),
+            context: document.querySelector('.video_canvas_1').getContext('2d'),
+            videoImages: [],
          },
          values: {
+            // Video
+            videoImageCount: 960,
+            imageSequence: [0, 959],
+            canvas_opacity_in: [0, 1, { start: 0, end: 0.1 }],
+            canvas_opacity_out: [1, 0, { start: 0.95, end: 1 }],
             messageA_translateY_in: [20, 0, { start: 0.15, end: 0.2 }],
             messageA_opacity_in: [0, 1, { start: 0.25, end: 0.3 }],
             messageA_translateY_out: [0, -20, { start: 0.4, end: 0.45 }],
@@ -83,20 +98,39 @@ $(document).ready(function () {
          objs: {
             container: document.querySelector('.section_4'),
             canvasCaption: document.querySelector('.canvas_text'),
+            canvas: document.querySelector('.image_blend_canvas'),
+            context: document.querySelector('.image_blend_canvas').getContext('2d'),
          },
       },
    ];
+
+   const setCanvasImage = () => {
+      let imgElem;
+      let imgElem2;
+      for (var i = 0; i < sceneInfo[0].values.videoImageCount; i++) {
+         imgElem = new Image();
+         imgElem.src = `./video/001/IMG_${6726 + i}.JPG`;
+         sceneInfo[0].objs.videoImages.push(imgElem);
+      }
+      for (var i = 0; i < sceneInfo[2].values.videoImageCount; i++) {
+         imgElem2 = new Image();
+         imgElem2.src = `./video/002/IMG_${7027 + i}.JPG`;
+         sceneInfo[2].objs.videoImages.push(imgElem2);
+      }
+   };
+
+   setCanvasImage();
 
    const setLayout = () => {
       // 각 스크롤 섹션의 높이 세팅
       for (let i = 0; i < sceneInfo.length; i++) {
          if (sceneInfo[i].type === 'sticky') {
             sceneInfo[i].scrollHeight = sceneInfo[i].heightNum * window.innerHeight;
-            sceneInfo[i].objs.container.style.height = `${sceneInfo[i].scrollHeight}px`;
          } else if (sceneInfo[i].type === 'normal') {
             // 컨텐츠 만큼 높이 값
-            sceneInfo[i].objs.container.style.height = sceneInfo[i].objs.container.offsetHeight;
+            sceneInfo[i].scrollHeight = sceneInfo[i].objs.container.offsetHeight;
          }
+         sceneInfo[i].objs.container.style.height = `${sceneInfo[i].scrollHeight}px`;
       }
       // 새로고침 시 전 씬값 세팅
       let totalScrollHeight = 0;
@@ -109,6 +143,12 @@ $(document).ready(function () {
          }
       }
       document.body.setAttribute('class', `scroll_section_${currentScene + 1}`);
+
+      const heightRatio = window.innerHeight / 1080;
+      console.log(innerHeight);
+      console.log(heightRatio);
+      sceneInfo[0].objs.canvas.style.transform = `translate3D(-50%,-50%,0) scale(${heightRatio})`;
+      sceneInfo[2].objs.canvas.style.transform = `translate3D(-50%,-50%,0) scale(${heightRatio})`;
    };
 
    let yOffset = 0; // window.pageYOffset 대신 쓸 변수
@@ -156,6 +196,9 @@ $(document).ready(function () {
       const scrollRatio = currentYOffset / scrollHeight;
       switch (currentScene) {
          case 0:
+            let sequence = Math.round(calcValues(values.imageSequence, currentYOffset));
+            objs.context.drawImage(objs.videoImages[sequence], 0, 0);
+            objs.canvas.style.opacity = calcValues(values.canvas_opacity, currentYOffset);
             if (scrollRatio <= 0.22) {
                // in
                objs.messageA.style.opacity = calcValues(values.messageA_opacity_in, currentYOffset);
@@ -197,9 +240,17 @@ $(document).ready(function () {
             }
             break;
          case 1:
-            // console.log('1 play');
             break;
          case 2:
+            let sequence2 = Math.round(calcValues(values.imageSequence, currentYOffset));
+            objs.context.drawImage(objs.videoImages[sequence2], 0, 0);
+            if (scrollRatio <= 0.5) {
+               // in
+               objs.canvas.style.opacity = calcValues(values.canvas_opacity_in, currentYOffset);
+            } else {
+               // out
+               objs.canvas.style.opacity = calcValues(values.canvas_opacity_out, currentYOffset);
+            }
             if (scrollRatio <= 0.32) {
                // in
                objs.messageA.style.opacity = calcValues(values.messageA_opacity_in, currentYOffset);
@@ -235,7 +286,9 @@ $(document).ready(function () {
             }
             break;
          case 3:
-            // console.log('3 play');
+            const widthRatio = window.innerWidth / objs.canvas.width;
+            const heightRatio = window.innerHeight / objs.canvas.height;
+            console.log(widthRatio, heightRatio);
             break;
       }
    };
@@ -270,7 +323,11 @@ $(document).ready(function () {
    window.addEventListener('scroll', () => {
       yOffset = window.pageYOffset;
       scrollLoop();
+      console.log(currentScene);
    });
-   window.addEventListener('load', setLayout);
+   window.addEventListener('load', () => {
+      setLayout();
+      sceneInfo[0].objs.context.drawImage(sceneInfo[0].objs.videoImages[0], 0, 0);
+   });
    window.addEventListener('resize', setLayout);
 });
