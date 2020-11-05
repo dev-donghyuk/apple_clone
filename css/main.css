@@ -119,7 +119,7 @@ body.scroll_section_4 .section_4 .sticky_elem {
 }
 
 .image_blend_canvas {
-   border: 3px solid red;
+   background: blue;
 }
 
 .section .dec {
@@ -182,6 +182,9 @@ body.scroll_section_4 .section_4 .sticky_elem {
 }
 /* section_4 */
 .section_4 {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
 }
 .section_4 p {
    max-width: 1000px;
