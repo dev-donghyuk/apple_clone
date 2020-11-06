@@ -107,6 +107,7 @@ $(document).ready(function () {
             rect1X: [0, 0, { start: 0, end: 0 }],
             rect2X: [0, 0, { start: 0, end: 0 }],
             rectStartY: 0,
+            blendHeight: [0, 0, { start: 0, end: 0 }],
          },
       },
    ];
@@ -158,8 +159,6 @@ $(document).ready(function () {
       document.body.setAttribute('class', `scroll_section_${currentScene + 1}`);
 
       const heightRatio = window.innerHeight / 1080;
-      console.log(innerHeight);
-      console.log(heightRatio);
       sceneInfo[0].objs.canvas.style.transform = `translate3D(-50%,-50%,0) scale(${heightRatio})`;
       sceneInfo[2].objs.canvas.style.transform = `translate3D(-50%,-50%,0) scale(${heightRatio})`;
    };
@@ -297,8 +296,44 @@ $(document).ready(function () {
                objs.messageC.style.opacity = calcValues(values.messageC_opacity_out, currentYOffset);
                objs.lineC.style.transform = `scaleY(${calcValues(values.lineC_scaleY, currentYOffset)})`;
             }
+            // section_4에서 캔버스 미리 그려주기위한 작업
+            if (scrollRatio > 0.9) {
+               const objs = sceneInfo[3].objs;
+               const values = sceneInfo[3].values;
+               // 가로/세로 모두 꽉차게 하기위해 여기서  세팅(계산 필요)
+               const widthRatio = document.body.offsetWidth / objs.canvas.width;
+               const heightRatio = window.innerHeight / objs.canvas.height;
+               let canvasScaleRatio;
+
+               if (widthRatio <= heightRatio) {
+                  // 캔버스보다 브라우저 창이 홀쭉한 경우
+                  canvasScaleRatio = heightRatio;
+               } else {
+                  canvasScaleRatio = widthRatio;
+                  // 캔버스보다 브라우저 창이 납작한 경우
+               }
+               objs.canvas.style.transform = `scale(${canvasScaleRatio})`;
+               objs.context.fillStyle = '#fff';
+               objs.context.drawImage(objs.images[0], 0, 0);
+
+               // 캔버스 사이즈에 맞춰 가정한 innerWidth와 innerHeight
+               const recalculateInnerWidth = window.innerWidth / canvasScaleRatio;
+               const recalculateInnerHeight = window.innerHeight / canvasScaleRatio;
+
+               // 가려줄 박스 값 세팅해주기
+               const whiteRectWidth = recalculateInnerWidth * 0.15;
+
+               values.rect1X[0] = (objs.canvas.width - recalculateInnerWidth) / 2;
+               values.rect1X[1] = values.rect1X[0] - whiteRectWidth;
+               values.rect2X[0] = values.rect1X[0] + recalculateInnerWidth - whiteRectWidth;
+               values.rect2X[1] = values.rect2X[0] + whiteRectWidth;
+               // 가려줄 박스 값 그려주기
+               objs.context.fillRect(parseInt(values.rect1X[0]), 0, parseInt(whiteRectWidth), recalculateInnerHeight);
+               objs.context.fillRect(parseInt(values.rect2X[0]), 0, parseInt(whiteRectWidth), recalculateInnerHeight);
+            }
             break;
          case 3:
+            let step = 0;
             // 가로/세로 모두 꽉차게 하기위해 여기서  세팅(계산 필요)
             const widthRatio = document.body.offsetWidth / objs.canvas.width;
             const heightRatio = window.innerHeight / objs.canvas.height;
@@ -306,20 +341,23 @@ $(document).ready(function () {
             if (widthRatio <= heightRatio) {
                // 캔버스보다 브라우저 창이 홀쭉한 경우
                canvasScaleRatio = heightRatio;
-               console.log('height');
             } else {
                canvasScaleRatio = widthRatio;
                // 캔버스보다 브라우저 창이 납작한 경우
-               console.log('width');
             }
             objs.canvas.style.transform = `scale(${canvasScaleRatio})`;
+            objs.context.fillStyle = '#fff';
             objs.context.drawImage(objs.images[0], 0, 0);
             // 캔버스 사이즈에 맞춰 가정한 innerWidth와 innerHeight
             const recalculateInnerWidth = window.innerWidth / canvasScaleRatio;
             const recalculateInnerHeight = window.innerHeight / canvasScaleRatio;
             // 애니메이션 시작시점
             if (!values.rectStartY) {
-               values.rectStartY = objs.canvas.getBoundingClientRect().top;
+               // 시작지점 섹션과 캔버스사이 간격 + 스케일로 줄어든만큼의 캔버스 간격
+               values.rectStartY = objs.canvas.offsetTop + (objs.canvas.height - objs.canvas.height * canvasScaleRatio) / 2;
+               console.log(window.innerHeight);
+               values.rect1X[2].start = window.innerHeight / 2 / scrollHeight;
+               values.rect2X[2].start = window.innerHeight / 2 / scrollHeight;
                values.rect1X[2].end = values.rectStartY / scrollHeight;
                values.rect2X[2].end = values.rectStartY / scrollHeight;
             }
@@ -334,6 +372,41 @@ $(document).ready(function () {
             // // 가려줄 박스 값 그려주기
             objs.context.fillRect(calcValues(values.rect1X, currentYOffset), 0, parseInt(whiteRectWidth), recalculateInnerHeight);
             objs.context.fillRect(calcValues(values.rect2X, currentYOffset), 0, parseInt(whiteRectWidth), recalculateInnerHeight);
+
+            // step
+            if (scrollRatio < values.rect1X[2].end) {
+               step = 1;
+               console.log('캔버스 닿기 전');
+               objs.canvas.classList.remove('sticky');
+            } else {
+               step = 2;
+               console.log('캔버스 닿은 후');
+               // 첫번째 이미지 고정
+               objs.canvas.classList.add('sticky');
+               // top 위치 위로 맞추기
+               objs.canvas.style.top = `-${(objs.canvas.height - objs.canvas.height * canvasScaleRatio) / 2}px`;
+               // 블랜드 이미지
+               values.blendHeight[0] = 0;
+               values.blendHeight[1] = objs.canvas.height;
+               // 첫번째 애니메이션 끝나는 지점을 두번째 애니메이션 시작 지점으로 세팅
+               values.blendHeight[2].start = values.rect1X[2].end;
+               values.blendHeight[2].end = values.rect1X[2].end + 0.2;
+
+               const blendHeight = calcValues(values.blendHeight, currentYOffset);
+
+               // 블랜드 이미지 그리기
+               objs.context.drawImage(
+                  objs.images[1],
+                  0,
+                  objs.canvas.height - blendHeight,
+                  objs.canvas.width,
+                  blendHeight,
+                  0,
+                  objs.canvas.height - blendHeight,
+                  objs.canvas.width,
+                  blendHeight
+               );
+            }
 
             break;
       }
@@ -369,7 +442,6 @@ $(document).ready(function () {
    window.addEventListener('scroll', () => {
       yOffset = window.pageYOffset;
       scrollLoop();
-      console.log(currentScene);
    });
    window.addEventListener('load', () => {
       setLayout();

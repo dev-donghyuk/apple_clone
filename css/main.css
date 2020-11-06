@@ -118,8 +118,9 @@ body.scroll_section_4 .section_4 .sticky_elem {
    top: 50%;
 }
 
-.image_blend_canvas {
-   background: blue;
+.image_blend_canvas.sticky {
+   position: fixed;
+   top: 0;
 }
 
 .section .dec {
