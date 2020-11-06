@@ -72,30 +72,6 @@
 }
 /* --------------------------------------------- */
 /* section */
-.section {
-   position: relative;
-   padding-top: 50vh;
-}
-.section .main_message {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   top: 35vh;
-   height: 3em;
-   font-size: 2.5rem;
-   opacity: 0;
-}
-.section .main_message p {
-   line-height: 1.2;
-   font-weight: bold;
-   text-align: center;
-}
-.section .sticky_elem {
-   display: none;
-   position: fixed;
-   left: 0;
-   width: 100%;
-}
 
 /* 스크롤 값에따른 메세지 여부 */
 body.scroll_section_1 .section_1 .sticky_elem,
@@ -123,6 +99,34 @@ body.scroll_section_4 .section_4 .sticky_elem {
    top: 0;
 }
 
+.section {
+   position: relative;
+   padding-top: 50vh;
+}
+
+.section .main_message {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   top: 35vh;
+   height: 3em;
+   font-size: 2.5rem;
+   opacity: 0;
+}
+
+.section .main_message p {
+   line-height: 1.2;
+   font-weight: bold;
+   text-align: center;
+}
+
+.section .sticky_elem {
+   display: none;
+   position: fixed;
+   left: 0;
+   width: 100%;
+}
+
 .section .dec {
    max-width: 1000px;
    width: 100%;
@@ -137,6 +141,7 @@ body.scroll_section_4 .section_4 .sticky_elem {
    font-size: 3rem;
    color: rgb(29, 29, 31);
 }
+
 /* section_1 */
 .section_1 h1 {
    position: relative;
